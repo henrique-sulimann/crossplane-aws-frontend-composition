@@ -1,0 +1,45 @@
+# Replace this with your XR!
+apiVersion: aws.sulimann.com.br/v1
+kind: Frontend
+metadata:
+  name: example-frontend
+spec:
+  awsAccountId: '123456789012'
+  bucketName: 'example-bucket-name'
+  region: 'us-east-1'
+  certificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012'
+  defaultRootObject: 'index.html'
+  dns: 
+    - 'example.domain.com'
+  httpVersion: 'http2and3'
+  minimumProtocolVersion: 'TLSv1.2_2021'
+  priceClass: 'PriceClass_100'
+  createResponseHeadersPolicy: true
+  createOriginRequestPolicy: true
+  createCachePolicy: true
+  allowedMethods:
+    - GET
+    - HEAD
+    - OPTIONS
+  # cachePolicyId: 00000000-0000-0000-0000-000000000000
+  # originRequestPolicyId: 00000000-0000-0000-0000-000000000000
+  # responseHeadersPolicyId: 00000000-0000-0000-0000-000000000000
+  # functionAssociations:
+  #   - eventType: viewer-request
+  #     functionArn: 'arn:aws:cloudfront::123456789012:function/example-function'
+  # customCacheBehaviors:
+  #   - pathPattern: '/api/*'
+  #     allowedMethods:
+  #       - GET
+  #       - HEAD
+  #       - OPTIONS
+  #       - PUT
+  #       - POST
+  #       - DELETE
+  #       - PATCH
+  #     cachePolicyId: 00000000-0000-0000-0000-000000000000
+  #     originRequestPolicyId: 00000000-0000-0000-0000-000000000000
+  #     responseHeadersPolicyId: 00000000-0000-0000-0000-000000000000
+  #     functionAssociations:
+  #       - eventType: viewer-request
+  #         functionArn: 'arn:aws:cloudfront::123456789012:function/example-function'

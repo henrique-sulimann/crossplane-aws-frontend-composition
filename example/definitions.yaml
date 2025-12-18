@@ -1,0 +1,152 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: frontends.aws.sulimann.com.br
+spec:
+  group: aws.sulimann.com.br
+  names:
+    kind: Frontend
+    plural: frontends
+  defaultCompositionRef:
+    name: function-aws-frontend
+  versions:
+    - name: v1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              description: Configuration for a static frontend on AWS S3 + CloudFront
+              required:
+                - awsAccountId
+                - bucketName
+                - region
+                - certificateArn
+                - defaultRootObject
+                - dns
+                - httpVersion
+                - minimumProtocolVersion
+                - priceClass
+                - allowedMethods
+              properties:
+                awsAccountId:
+                  type: string
+                  description: AWS Account ID that owns the CloudFront distribution and S3 bucket.
+                bucketName:
+                  type: string
+                  description: Name of the S3 bucket used to host the static frontend.
+                region:
+                  type: string
+                  description: AWS region of the S3 bucket (e.g. us-east-1).
+                certificateArn:
+                  type: string
+                  description: ACM certificate ARN in us-east-1 for the CloudFront distribution.
+                defaultRootObject:
+                  type: string
+                  description: Default root object for CloudFront (e.g. index.html).
+                dns:
+                  type: array
+                  description: List of CNAMEs/aliases for the CloudFront distribution.
+                  items:
+                    type: string
+                httpVersion:
+                  type: string
+                  description: HTTP version for CloudFront (e.g. http2, http2and3).
+                minimumProtocolVersion:
+                  type: string
+                  description: Minimum TLS protocol version (e.g. TLSv1.2_2021).
+                priceClass:
+                  type: string
+                  description: CloudFront price class (e.g. PriceClass_100, PriceClass_200, PriceClass_All).
+                allowedMethods:
+                  type: array
+                  description: Allowed HTTP methods for the default cache behavior.
+                  items:
+                    type: string
+                    enum:
+                      - GET
+                      - HEAD
+                      - OPTIONS
+                      - PUT
+                      - PATCH
+                      - POST
+                      - DELETE
+                createResponseHeadersPolicy:
+                  type: boolean
+                  description: If true, create a custom ResponseHeadersPolicy for this frontend.
+                  default: false
+                createOriginRequestPolicy:
+                  type: boolean
+                  description: If true, create a custom OriginRequestPolicy for this frontend.
+                  default: false
+                createCachePolicy:
+                  type: boolean
+                  description: If true, create a custom CachePolicy for this frontend.
+                  default: false
+                responseHeadersPolicyId:
+                  type: string
+                  description: >
+                    Optional existing CloudFront ResponseHeadersPolicy ID. If set and
+                    createResponseHeadersPolicy is false, this ID will be used in the Distribution.
+                originRequestPolicyId:
+                  type: string
+                  description: >
+                    Optional existing CloudFront OriginRequestPolicy ID. If set and
+                    createOriginRequestPolicy is false, this ID will be used in the Distribution.
+                cachePolicyId:
+                  type: string
+                  description: >
+                    Optional existing CloudFront CachePolicy ID. If set and
+                    createCachePolicy is false, this ID will be used in the Distribution.
+            status:
+              type: object
+              description: Status of this composite resource.
+              properties:
+                resourceRefs:
+                  description: References to the composed resources.
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - apiVersion
+                      - kind
+                      - name
+                    properties:
+                      apiVersion:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                      uid:
+                        type: string
+                conditions:
+                  description: Conditions of the resource.
+                  type: array
+                  x-kubernetes-list-type: map
+                  x-kubernetes-list-map-keys:
+                    - type
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - status
+                      - reason
+                      - lastTransitionTime
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      reason:
+                        type: string
+                      message:
+                        type: string
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+                      observedGeneration:
+                        type: integer
